@@ -1,0 +1,19 @@
+{
+    "name": "crudstack",
+    "version": "0.1.0",
+    "private": true,
+    "packageManager": "pnpm@11.6.0",
+    "scripts": {
+        "lint": "pnpm -r lint",
+        "build": "pnpm -r build",
+        "format": "prettier --write .",
+        "clean": "pnpm -r run clean && rm -rf node_modules pnpm-lock.yaml"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "devDependencies": {
+        "prettier": "^3.8.4",
+        "typescript": "^6.0.3"
+    }
+}
