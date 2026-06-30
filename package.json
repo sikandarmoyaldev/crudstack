@@ -4,10 +4,11 @@
     "private": true,
     "packageManager": "pnpm@11.6.0",
     "scripts": {
-        "lint": "pnpm -r lint",
-        "build": "pnpm -r build",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "build": "turbo run build",
         "format": "prettier --write .",
-        "clean": "pnpm -r run clean && rm -rf node_modules pnpm-lock.yaml",
+        "clean": "turbo run clean && rm -rf node_modules pnpm-lock.yaml",
         "changeset": "changeset",
         "release": "changeset publish",
         "version-packages": "changeset version"
@@ -18,6 +19,7 @@
     "devDependencies": {
         "@changesets/cli": "^2.31.0",
         "prettier": "^3.8.4",
+        "turbo": "^2.10.0",
         "typescript": "^6.0.3"
     }
 }
