@@ -15,7 +15,8 @@
     "scripts": {
         "build": "tsup src/index.ts --format cjs,esm --dts",
         "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-        "clean": "rm -rf dist node_modules"
+        "clean": "rm -rf dist node_modules",
+        "test": "vitest"
     },
     "publishConfig": {
         "access": "public"
@@ -25,9 +26,11 @@
         "@crudstack/typescript-config": "workspace:*",
         "@types/better-sqlite3": "^7.6.13",
         "drizzle-kit": "^0.31.10",
-        "tsup": "^8.5.1"
+        "tsup": "^8.5.1",
+        "vitest": "^4.1.9"
     },
     "dependencies": {
+        "@types/node": "^26.0.1",
         "better-sqlite3": "^12.11.1",
         "drizzle-orm": "^0.45.2"
     }
