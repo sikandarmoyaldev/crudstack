@@ -27,8 +27,8 @@ export class CrudStack {
      * const users = crudstack.createResource<User>('users');
      * const user = await users.getOne({ $eq: { email: 'test@example.com' } });
      */
-    createResource<T extends Entity>(name: string): Resource<T> {
-        return new ResourceImpl<T>(name, this.db);
+    createResource<T extends Entity>(name: string, schema?: unknown): Resource<T> {
+        return new ResourceImpl<T>(name, this.db, schema);
     }
 
     /**

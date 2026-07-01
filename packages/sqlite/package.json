@@ -1,0 +1,34 @@
+{
+    "name": "@crudstack/sqlite",
+    "version": "0.0.1",
+    "private": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format cjs,esm --dts",
+        "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+        "clean": "rm -rf dist node_modules"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@crudstack/core": "workspace:*",
+        "@crudstack/typescript-config": "workspace:*",
+        "@types/better-sqlite3": "^7.6.13",
+        "drizzle-kit": "^0.31.10",
+        "tsup": "^8.5.1"
+    },
+    "dependencies": {
+        "better-sqlite3": "^12.11.1",
+        "drizzle-orm": "^0.45.2"
+    }
+}

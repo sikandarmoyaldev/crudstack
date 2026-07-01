@@ -8,25 +8,26 @@ export class ResourceImpl<T extends Entity> implements Resource<T> {
     constructor(
         private readonly resourceName: string,
         private readonly adapter: DatabaseAdapter,
+        private readonly schema?: unknown, // Added schema
     ) {}
 
     getOne(query: Query<T>): Promise<T> {
-        return this.adapter.getOne<T>(this.resourceName, query);
+        return this.adapter.getOne<T>(this.resourceName, query, this.schema);
     }
 
     getList(query?: Query<T>): Promise<T[]> {
-        return this.adapter.getList<T>(this.resourceName, query);
+        return this.adapter.getList<T>(this.resourceName, query, this.schema);
     }
 
     create(data: Omit<T, "id">): Promise<T> {
-        return this.adapter.create<T>(this.resourceName, data);
+        return this.adapter.create<T>(this.resourceName, data, this.schema);
     }
 
     update(id: string, data: Partial<Omit<T, "id">>): Promise<T> {
-        return this.adapter.update<T>(this.resourceName, id, data);
+        return this.adapter.update<T>(this.resourceName, id, data, this.schema);
     }
 
     delete(id: string): Promise<void> {
-        return this.adapter.delete(this.resourceName, id);
+        return this.adapter.delete(this.resourceName, id, this.schema);
     }
 }
