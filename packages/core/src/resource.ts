@@ -8,7 +8,7 @@ export class ResourceImpl<T extends Entity> implements Resource<T> {
     constructor(
         private readonly resourceName: string,
         private readonly adapter: DatabaseAdapter,
-        private readonly schema?: unknown, // Added schema
+        private readonly schema?: unknown,
     ) {}
 
     getOne(query: Query<T>): Promise<T> {
@@ -23,11 +23,13 @@ export class ResourceImpl<T extends Entity> implements Resource<T> {
         return this.adapter.create<T>(this.resourceName, data, this.schema);
     }
 
-    update(id: string, data: Partial<Omit<T, "id">>): Promise<T> {
-        return this.adapter.update<T>(this.resourceName, id, data, this.schema);
+    // UPDATED: Passes query instead of ID
+    update(query: Query<T>, data: Partial<Omit<T, "id">>): Promise<T[]> {
+        return this.adapter.update<T>(this.resourceName, query, data, this.schema);
     }
 
-    delete(id: string): Promise<void> {
-        return this.adapter.delete(this.resourceName, id, this.schema);
+    // UPDATED: Passes query instead of ID
+    delete(query: Query<T>): Promise<void> {
+        return this.adapter.delete(this.resourceName, query, this.schema);
     }
 }

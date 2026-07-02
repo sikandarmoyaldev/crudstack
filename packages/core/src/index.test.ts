@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CrudStack } from "./crudstack";
-import type { DatabaseAdapter, Entity } from "./types";
+import type { DatabaseAdapter, Entity, Query } from "./types";
 
 // 1. Define a mock type for our tests
 type User = Entity & { name: string; email: string };
@@ -53,7 +53,7 @@ describe("CrudStack Core", () => {
 
         it("should call adapter.getOne with correct arguments", async () => {
             const users = crudstack.createResource<User>("users");
-            const query = { $eq: { email: "sikandar@test.com" } };
+            const query: Query<User> = { $eq: { email: "sikandar@test.com" } };
 
             await users.getOne(query);
 
@@ -62,28 +62,37 @@ describe("CrudStack Core", () => {
 
         it("should call adapter.getList with correct arguments", async () => {
             const users = crudstack.createResource<User>("users");
-            const query = { $eq: { name: "Sikandar" } };
+            const query: Query<User> = { $eq: { name: "Sikandar" } };
 
             await users.getList(query);
 
             expect(mockAdapter.getList).toHaveBeenCalledWith("users", query, undefined);
         });
 
-        it("should call adapter.update with correct arguments", async () => {
+        it("should call adapter.update with a QUERY instead of an ID", async () => {
             const users = crudstack.createResource<User>("users");
+            const query: Query<User> = { $eq: { email: "sikandar@test.com" } };
             const updateData = { name: "Sikandar Updated" };
 
-            await users.update("123", updateData);
+            // Mock the return value (array of updated records)
+            vi.mocked(mockAdapter.update).mockResolvedValue([
+                { id: "123", ...updateData, email: "sikandar@test.com" },
+            ] as User[]);
 
-            expect(mockAdapter.update).toHaveBeenCalledWith("users", "123", updateData, undefined);
+            await users.update(query, updateData);
+
+            // Now expects: (resource, query, data, schema)
+            expect(mockAdapter.update).toHaveBeenCalledWith("users", query, updateData, undefined);
         });
 
-        it("should call adapter.delete with correct arguments", async () => {
+        it("should call adapter.delete with a QUERY instead of an ID", async () => {
             const users = crudstack.createResource<User>("users");
+            const query: Query<User> = { $eq: { email: "sikandar@test.com" } };
 
-            await users.delete("123");
+            await users.delete(query);
 
-            expect(mockAdapter.delete).toHaveBeenCalledWith("users", "123", undefined);
+            // Now expects: (resource, query, schema)
+            expect(mockAdapter.delete).toHaveBeenCalledWith("users", query, undefined);
         });
     });
 
@@ -97,6 +106,23 @@ describe("CrudStack Core", () => {
 
             // Assert the 3rd argument is our mockSchema
             expect(mockAdapter.create).toHaveBeenCalledWith("users", userData, mockSchema);
+        });
+
+        it("should pass the schema to update and delete operations", async () => {
+            const mockSchema = { type: "users", columns: ["id", "name"] };
+            const users = crudstack.createResource<User>("users", mockSchema);
+            const query: Query<User> = { $eq: { name: "Sikandar" } };
+
+            await users.update(query, { name: "Updated" });
+            await users.delete(query);
+
+            expect(mockAdapter.update).toHaveBeenCalledWith(
+                "users",
+                query,
+                { name: "Updated" },
+                mockSchema,
+            );
+            expect(mockAdapter.delete).toHaveBeenCalledWith("users", query, mockSchema);
         });
     });
 });
