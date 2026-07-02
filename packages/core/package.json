@@ -15,13 +15,15 @@
     "scripts": {
         "build": "tsup src/index.ts --format cjs,esm --dts",
         "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-        "clean": "rm -rf dist node_modules"
+        "clean": "rm -rf dist node_modules",
+        "test": "vitest run"
     },
     "publishConfig": {
         "access": "public"
     },
     "devDependencies": {
         "tsup": "^8.0.0",
+        "vitest": "^4.1.9",
         "@crudstack/typescript-config": "workspace:*"
     }
 }
