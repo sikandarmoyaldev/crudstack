@@ -10,6 +10,7 @@
         "**/.next": true,
         "**/dist": true,
         "**/.turbo": true,
+        "**/.changeset": true,
         "**/.DS_Store": true,
         "**/*.log": true,
         "pnpm-debug.log*": true,
