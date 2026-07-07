@@ -34,10 +34,6 @@ importers:
         version: 4.1.9(@types/node@26.0.1)(vite@8.1.2(@types/node@26.0.1)(esbuild@0.27.7)(tsx@4.22.4))
 
   packages/sanity:
-    dependencies:
-      '@sanity/client':
-        specifier: ^7.23.0
-        version: 7.23.0
     devDependencies:
       '@crudstack/core':
         specifier: workspace:*
@@ -45,6 +41,9 @@ importers:
       '@crudstack/typescript-config':
         specifier: workspace:*
         version: link:../../tooling/typescript-config
+      '@sanity/client':
+        specifier: ^7.23.0
+        version: 7.23.0
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.16)(tsx@4.22.4)(typescript@6.0.3)

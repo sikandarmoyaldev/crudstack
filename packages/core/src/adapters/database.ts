@@ -15,5 +15,6 @@ export interface DatabaseAdapter {
         data: Partial<Omit<T, "id">>,
         schema?: unknown,
     ): Promise<T[]>;
-    delete(resource: string, query: Query<Entity>, schema?: unknown): Promise<void>;
+    // FIX: Add <T extends Entity> so it accepts queries for any entity fields, not just 'id'
+    delete<T extends Entity>(resource: string, query: Query<T>, schema?: unknown): Promise<void>;
 }
