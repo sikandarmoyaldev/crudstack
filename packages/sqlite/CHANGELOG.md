@@ -1,6 +1,6 @@
 # @crudstack/sqlite
 
-## 0.3.0
+## 0.2.0
 
 ### Minor Changes
 
@@ -12,7 +12,7 @@ refactor architecture and align with core 0.3.0 query system
 - Adds full support for all query operators ($eq, $ne, $gt, $gte, $lt, $lte, $in, $nin).
 - Updates Drizzle ORM types to use the modern BetterSQLite3Database interface.
 
-## 0.2.0
+## 0.1.0
 
 ### Minor Changes
 

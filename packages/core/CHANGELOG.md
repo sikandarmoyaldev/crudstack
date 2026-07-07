@@ -4,6 +4,15 @@
 
 ### Minor Changes
 
+enable query-based bulk deletes on any entity field
+
+- Updated the `DatabaseAdapter` interface to make the `delete` method generic (`<T extends Entity>`).
+- This allows adapters to delete records using queries on any field of the entity, not just the `id`.
+
+## 0.2.0
+
+### Minor Changes
+
 refactor architecture into modular domains and introduce strict adapter contracts
 
 - Reorganized source code into distinct domains: types, core, resources, adapters, and modifiers.
@@ -11,7 +20,7 @@ refactor architecture into modular domains and introduce strict adapter contract
 - Moved test files into a dedicated `tests/` directory for cleaner separation of concerns.
 - Added `vitest.config.ts` to support path aliases in tests.
 
-## 0.2.0
+## 0.1.0
 
 ### Minor Changes
 
