@@ -1,2 +1,2 @@
-export * from "./adapters/database";
-export * from "./modifiers/query";
+export * from "./adapters";
+export * from "./modifiers";

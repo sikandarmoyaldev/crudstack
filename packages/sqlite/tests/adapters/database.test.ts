@@ -4,7 +4,8 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { randomUUID } from "node:crypto";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { SQLiteDatabaseAdapter, queryBuilder } from "./index";
+import { SQLiteDatabaseAdapter } from "@/adapters/database";
+import { queryBuilder } from "@/modifiers/query";
 
 const users = sqliteTable("users", {
     id: text("id")
@@ -17,16 +18,12 @@ const users = sqliteTable("users", {
 
 type User = { id: string; name: string; email: string; age: number | null };
 
-describe("SQLiteDatabaseAdapter + QueryBuilder", () => {
+describe("SQLiteDatabaseAdapter", () => {
     let adapter: SQLiteDatabaseAdapter;
     let sqliteDb: Database.Database;
 
-    // This runs before EVERY test, ensuring a completely clean database state
     beforeEach(() => {
-        // Create an in-memory SQLite database
         sqliteDb = new Database(":memory:");
-
-        // Create the table manually (since we aren't running migrations in tests)
         sqliteDb.exec(`
             CREATE TABLE users (
                 id TEXT PRIMARY KEY,
@@ -35,8 +32,6 @@ describe("SQLiteDatabaseAdapter + QueryBuilder", () => {
                 age INTEGER
             );
         `);
-
-        // Initialize Drizzle and the Adapter
         const db = drizzle(sqliteDb);
         adapter = new SQLiteDatabaseAdapter(db);
     });
@@ -45,7 +40,6 @@ describe("SQLiteDatabaseAdapter + QueryBuilder", () => {
         const data = { name: "Sikandar", email: "sikandar@test.com", age: 25 };
         const created = await adapter.create<User>("users", data, users);
 
-        // Use the centralized QueryBuilder
         const query = queryBuilder<User>().eq("email", "sikandar@test.com").build();
         const result = await adapter.getOne<User>("users", query, users);
 
@@ -60,16 +54,36 @@ describe("SQLiteDatabaseAdapter + QueryBuilder", () => {
             users,
         );
 
-        // Update using QueryBuilder
         const updateQuery = queryBuilder<User>().eq("id", created.id).build();
         const updated = await adapter.update<User>("users", updateQuery, { age: 26 }, users);
         expect(updated[0].age).toBe(26);
 
-        // Delete using QueryBuilder
         const deleteQuery = queryBuilder<User>().eq("id", created.id).build();
         await adapter.delete("users", deleteQuery, users);
 
         const remaining = await adapter.getList<User>("users", undefined, users);
         expect(remaining).toHaveLength(0);
+    });
+
+    it("should support advanced operators like $gt and $in", async () => {
+        await adapter.create<User>("users", { name: "Alice", email: "a@test.com", age: 20 }, users);
+        await adapter.create<User>("users", { name: "Bob", email: "b@test.com", age: 30 }, users);
+        await adapter.create<User>(
+            "users",
+            { name: "Charlie", email: "c@test.com", age: 40 },
+            users,
+        );
+
+        // Test $gt
+        const olderThan25 = await adapter.getList<User>("users", { age: { $gt: 25 } }, users);
+        expect(olderThan25).toHaveLength(2);
+
+        // Test $in
+        const specificNames = await adapter.getList<User>(
+            "users",
+            { name: { $in: ["Alice", "Charlie"] } },
+            users,
+        );
+        expect(specificNames).toHaveLength(2);
     });
 });
