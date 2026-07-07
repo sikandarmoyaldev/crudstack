@@ -1,5 +1,16 @@
 # @crudstack/core
 
+## 0.3.0
+
+### Minor Changes
+
+refactor architecture into modular domains and introduce strict adapter contracts
+
+- Reorganized source code into distinct domains: types, core, resources, adapters, and modifiers.
+- Introduced a strict `QueryOperatorResolver` contract and `buildNativeConditions` utility to enforce and simplify adapter implementation.
+- Moved test files into a dedicated `tests/` directory for cleaner separation of concerns.
+- Added `vitest.config.ts` to support path aliases in tests.
+
 ## 0.2.0
 
 ### Minor Changes
