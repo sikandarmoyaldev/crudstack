@@ -32,7 +32,7 @@
     "explorer.fileNesting.patterns": {
         ".env.local": ".env.*",
         "README.md": "README.md, CONTRIBUTING.md, CHANGELOG.md",
-        "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, .prettier*, prettier*, eslint*, tsconfig*, next.config*",
+        "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, .prettier*, prettier*, eslint*, tsconfig*, next.config*, vitest.config.ts",
         "tailwind.config.*": "tailwind.config.js, postcss.config.js, postcss.config.mjs"
     },
 

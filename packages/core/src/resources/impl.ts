@@ -1,8 +1,13 @@
-import type { DatabaseAdapter, Entity, Query, Resource } from "./types";
+import type { DatabaseAdapter } from "@/adapters/database";
+import type { Query } from "@/modifiers/query";
+import type { Entity } from "@/types/entity";
+
+import type { Resource } from "./types";
 
 /**
  * Internal implementation of the Resource interface.
- * Delegates all calls to the underlying DatabaseAdapter.
+ * Delegates all CRUD operations to the underlying DatabaseAdapter,
+ * passing along the resource name and optional schema.
  */
 export class ResourceImpl<T extends Entity> implements Resource<T> {
     constructor(
@@ -11,25 +16,23 @@ export class ResourceImpl<T extends Entity> implements Resource<T> {
         private readonly schema?: unknown,
     ) {}
 
-    getOne(query: Query<T>): Promise<T> {
+    public getOne(query: Query<T>): Promise<T> {
         return this.adapter.getOne<T>(this.resourceName, query, this.schema);
     }
 
-    getList(query?: Query<T>): Promise<T[]> {
+    public getList(query?: Query<T>): Promise<T[]> {
         return this.adapter.getList<T>(this.resourceName, query, this.schema);
     }
 
-    create(data: Omit<T, "id">): Promise<T> {
+    public create(data: Omit<T, "id">): Promise<T> {
         return this.adapter.create<T>(this.resourceName, data, this.schema);
     }
 
-    // UPDATED: Passes query instead of ID
-    update(query: Query<T>, data: Partial<Omit<T, "id">>): Promise<T[]> {
+    public update(query: Query<T>, data: Partial<Omit<T, "id">>): Promise<T[]> {
         return this.adapter.update<T>(this.resourceName, query, data, this.schema);
     }
 
-    // UPDATED: Passes query instead of ID
-    delete(query: Query<T>): Promise<void> {
+    public delete(query: Query<T>): Promise<void> {
         return this.adapter.delete(this.resourceName, query, this.schema);
     }
 }
